@@ -80,7 +80,7 @@ void OpeningScreen(void)
     display.setTextColor(WHITE);
     display.setCursor(8, 0);
     display.clearDisplay();
-    display.print(F("True \n  Randomness!"));
+    display.print(F("True\nRandomness!"));
     display.display();
     display.setTextSize(1);
     display.clearDisplay();
@@ -109,11 +109,11 @@ void get_time()
 {
   unsigned long int OLED_t1             = micros();
   
-  display.setCursor(0, 0);
-  display.clearDisplay();
-  display.print(F("Total Count: "));
-  display.println(count);
-  display.print(F("Uptime: "));
+  //display.setCursor(0, 0);
+  //display.clearDisplay();
+  //display.print(F("Total Count: "));
+  //display.println(count);
+  //display.print(F("Uptime: "));
 
   int minutes                 = ((interrupt_timer - start_time) / 1000 / 60) % 60;
   int seconds                 = ((interrupt_timer - start_time) / 1000) % 60;
@@ -123,7 +123,7 @@ void get_time()
   sprintf(min_char, "%02d", minutes);
   sprintf(sec_char, "%02d", seconds);
 
-  display.println((String) ((interrupt_timer - start_time) / 1000 / 3600) + ":" + min_char + ":" + sec_char);
+  //display.println((String) ((interrupt_timer - start_time) / 1000 / 3600) + ":" + min_char + ":" + sec_char);
 
   if (count == 0) {
     display.println("Starting: "+(String)detector_name);
@@ -249,24 +249,29 @@ void increment(Number *n)  {
   }
 //TODO MAKE IT DISPLAY ON SCREEN  
 void show() {
+    display.setTextSize(2);
+    display.setTextColor(WHITE);
+    display.setCursor(8, 0);
     display.clearDisplay();
     Number *printer = malloc(sizeof(Number));
     printer = head;
-    int i = 0;
+    char numString[]="";
+    char temp[8];
     while(printer) {
-
-        display.setTextSize(2);
-        display.setTextColor(WHITE);
-        display.setCursor(8, i);            
-        display.print(printer->num);
-        display.setTextSize(1);
-
-        Serial.print(printer->num);
+        fflush(stdin);
+        dtostrf(printer->num,1,0,temp);   
+        strcat(numString,temp);
+        
+        //Serial.print(printer->num);
         printer = printer->next;
-        i++;
-    
+  
       }
+    display.print(numString);
     display.display();
+    Serial.print(numString);
+    display.setTextSize(1);
+    display.clearDisplay();
+    delay(8);
     Serial.print("\n");  
   }
 
